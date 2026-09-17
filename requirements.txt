@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+asyncpg
+pydantic-settings
+pyjwt
+bcrypt
+httpx
+boto3
+python-multipart
