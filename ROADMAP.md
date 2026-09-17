@@ -27,12 +27,12 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [ ] Explicar el diagrama en voz alta, en palabras simples, como si se lo mostraras a Dr. Suresh — sin mirar notas.
 
 ## Fase 2 — Entorno y esqueleto del proyecto
-- [ ] Crear base de datos PostgreSQL local (ya tienes Postgres 16 instalado).
-- [ ] Crear entorno virtual de Python e instalar dependencias: `fastapi`, `uvicorn`, `asyncpg`, `pydantic-settings`, `passlib`/`bcrypt`, `pyjwt` o `python-jose`, `httpx`, `boto3`.
-- [ ] Definir estructura de carpetas de 3 capas (presentación / servicios / repositorios) — la dependencia solo fluye controlador → servicio → repositorio, nunca al revés (§05, "Revisión de código").
-- [ ] Configurar `.env` y `.env.example` (sin secretos reales en el repo).
-- [ ] Endpoint de salud (`GET /`) para confirmar que todo corre.
-- [ ] Inicializar repositorio Git.
+- [x] Crear base de datos PostgreSQL local — `wildlife_evidence_registry` (dedicada; `mini_proyecto` era de otro ejercicio, no se tocó).
+- [x] Crear entorno virtual de Python e instalar dependencias: `fastapi`, `uvicorn`, `asyncpg`, `pydantic-settings`, `bcrypt`, `pyjwt`, `httpx`, `boto3`, `python-multipart`.
+- [x] Definir estructura de carpetas de 3 capas: `app/presentation`, `app/services`, `app/repositories`, `app/db` (pool de `asyncpg`), `app/config.py` (settings).
+- [x] Configurar `.env` (real, git-ignorado; reutiliza credenciales de AWS/Gemini de `fastapi-gemini-s3`) y `.env.example` (placeholders, sí se sube al repo).
+- [x] Endpoint de salud (`GET /health`) — probado, responde `200 OK` con el pool conectado.
+- [x] Inicializar repositorio Git — primer commit real hecho (`a64c887`).
 
 ## Fase 3 — Esquema de base de datos (DDL)
 - [ ] Traducir el ERD de la Fase 1 a `CREATE TABLE` en SQL puro.
