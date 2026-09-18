@@ -8,3 +8,5 @@ httpx
 boto3
 python-multipart
 fpdf2
+pytest
+pytest-asyncio

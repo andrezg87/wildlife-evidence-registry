@@ -105,8 +105,11 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] Probado de punta a punta con datos reales: informe de enero 2026 generado, agregados verificados a mano, PDF en chino descargado y leído — bandera, título y texto de Gemini con los números exactos.
 
 ## Fase 12 — Validación de tus propios cálculos
-- [ ] Al menos una forma de verificar `POTENTIAL_LOSS_PER_CASE` (test automatizado o endpoint secundario con lógica distinta que recalcule y compare).
-- [ ] Dejarla visible en el repositorio (no borrarla).
+- [x] `tests/test_potential_loss_cross_check.py` — la prueba central: recalcula `POTENTIAL_LOSS_PER_CASE` con SQL puro (`SUM()`), un camino completamente distinto al de producción (loop en Python), y compara que coincidan. Segunda prueba compara contra el valor calculado a mano.
+- [x] `tests/test_custody_immutability.py` — prueba "estructural": confirma que `custody_event_repository` no expone ninguna función de `update`/`delete` (la garantía de la Fase 5, verificada automáticamente).
+- [x] `tests/test_auth_service.py` — hash de contraseñas (acepta la correcta, rechaza la incorrecta) y la dependencia `require_lab_director` (acepta `lab_director`, rechaza `analyst` con `403`).
+- [x] `pytest.ini` — configuración necesaria para que el pool de base de datos (de sesión) y las pruebas async compartan el mismo event loop; sin esto, las pruebas con base de datos fallan con un error de "different loop".
+- [x] 6 pruebas, todas pasando. Quedan en el repositorio, no se borran.
 
 ## Fase 13 — Limpieza y revisión de código
 - [ ] Confirmar arquitectura en una sola dirección (controlador → servicio → repositorio).
