@@ -118,10 +118,10 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] Suite de pruebas (Fase 12) y arranque completo de la app (21 rutas) verificados de nuevo después de la limpieza — nada se rompió.
 
 ## Fase 14 — Documentación y entregables
-- [ ] README con pasos de instalación y el porqué de tus decisiones de diseño.
-- [ ] ERD como archivo aparte (ya generado en Fase 1).
-- [ ] `.env.example` sin secretos reales.
-- [ ] Repositorio en GitHub con historial de commits real (no todo en un solo commit).
+- [x] `README.md` — instalación, usuarios de prueba, y cada decisión de diseño no trivial con su porqué (pensado como material de repaso, no solo como onboarding).
+- [x] ERD como archivo aparte — `erd.png` / `erd.mmd` (Fase 1, actualizado en Fase 11 con la columna nueva).
+- [x] `.env.example` sin secretos reales — verificado con `git ls-files` que el `.env` real nunca se subió.
+- [x] **Repositorio en GitHub:** https://github.com/andrezg87/wildlife-evidence-registry — público, historial de commits real (14 commits, uno por fase/hito, no un solo commit final).
 
 ## Fase 15 — Preparación de la sustentación
 - [ ] **Fase 1 (inglés):** ensayar presentar hallazgos a "Dr. Suresh" en lenguaje de negocio — casos, especies, pérdidas evitadas — sin jerga técnica.
