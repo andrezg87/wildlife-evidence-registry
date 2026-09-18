@@ -112,10 +112,10 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] 6 pruebas, todas pasando. Quedan en el repositorio, no se borran.
 
 ## Fase 13 — Limpieza y revisión de código
-- [ ] Confirmar arquitectura en una sola dirección (controlador → servicio → repositorio).
-- [ ] Nombres de variables/tablas/funciones en inglés, `snake_case`, que reflejen el dominio (`evidence_item`, `custody_event`), nunca genéricos (`data`, `temp`, `x`).
-- [ ] Sin comentarios innecesarios — el código se explica por sus nombres.
-- [ ] Revisar que no haya SQL crudo fuera de los repositorios, ni reglas de negocio dentro de un repositorio o controlador.
+- [x] **Arquitectura confirmada con `grep`:** cero SQL crudo fuera de `app/repositories`. La fórmula de pérdida potencial vive en `case_service`, no en un repositorio (Fase 7). Todos los endpoints usan `response_model` con esquemas Pydantic propios — ninguno devuelve un `Record` de `asyncpg` directamente.
+- [x] **Nombrado:** encontrada y corregida una variable genérica (`data` → `generation_result` en `gemini_repository.py`, la respuesta parseada de Gemini). Cero `camelCase` accidental — todo `snake_case` consistente. Cero texto en español en `app/` ni `sql/` (verificado con `grep` de acentos y palabras comunes).
+- [x] **Comentarios:** un solo bloque en todo `app/` (`pdf_repository.py`) — explica por qué se necesita una fuente Unicode específica, una restricción externa no obvia, no un nombre mal elegido.
+- [x] Suite de pruebas (Fase 12) y arranque completo de la app (21 rutas) verificados de nuevo después de la limpieza — nada se rompió.
 
 ## Fase 14 — Documentación y entregables
 - [ ] README con pasos de instalación y el porqué de tus decisiones de diseño.

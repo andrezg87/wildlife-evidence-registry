@@ -22,8 +22,8 @@ async def generate_text(prompt: str) -> str:
             try:
                 response = await client.post(GEMINI_URL, json=body, headers=headers)
                 response.raise_for_status()
-                data = response.json()
-                return data["candidates"][0]["content"]["parts"][0]["text"]
+                generation_result = response.json()
+                return generation_result["candidates"][0]["content"]["parts"][0]["text"]
             except (httpx.HTTPStatusError, httpx.TimeoutException) as error:
                 last_error = error
                 if attempt < MAX_ATTEMPTS - 1:
