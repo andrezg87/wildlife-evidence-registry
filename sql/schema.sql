@@ -37,7 +37,7 @@ CREATE TABLE evidence_item (
     quantity NUMERIC(12, 3) NOT NULL CHECK (quantity > 0),
     unit TEXT NOT NULL CHECK (unit IN ('kg', 'unit')),
     collection_date DATE NOT NULL,
-    photo_url TEXT,
+    photo_key TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -65,6 +65,7 @@ CREATE TABLE monthly_report (
     potential_loss_usd NUMERIC(14, 2) NOT NULL,
     potential_loss_sgd NUMERIC(14, 2) NOT NULL,
     most_affected_species TEXT,
+    top_trafficker_nationality TEXT,
     status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'approved')),
     approved_by_user_id UUID REFERENCES users (id),
     approved_at TIMESTAMPTZ,
@@ -77,6 +78,6 @@ CREATE TABLE monthly_report_translation (
     report_id UUID NOT NULL REFERENCES monthly_report (id),
     language TEXT NOT NULL CHECK (language IN ('zh', 'ja', 'vi')),
     narrative_text TEXT NOT NULL,
-    pdf_url TEXT,
+    pdf_key TEXT,
     UNIQUE (report_id, language)
 );

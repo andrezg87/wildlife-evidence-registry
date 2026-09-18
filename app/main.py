@@ -7,6 +7,7 @@ from app.presentation import (
     auth_router,
     case_router,
     evidence_router,
+    report_router,
     species_router,
     suspect_router,
 )
@@ -26,6 +27,7 @@ app.include_router(auth_router.router)
 app.include_router(case_router.router)
 app.include_router(evidence_router.router)
 app.include_router(suspect_router.router)
+app.include_router(report_router.router)
 
 
 @app.get("/health")

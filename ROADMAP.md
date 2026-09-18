@@ -93,10 +93,16 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] `GET /cases/{id}/potential-loss` ahora devuelve ambas cifras. Verificado contra el caso 1: 10005.00000 USD → SGD, y el resultado coincide exactamente con una llamada manual e independiente a la misma API.
 
 ## Fase 11 — Reporte mensual con Gemini
-- [ ] Calcular en el backend los agregados del mes: número de decomisos, nacionalidad del traficante, pérdida potencial total (ambas monedas), especies más afectadas.
-- [ ] Enviar **solo esas cifras ya calculadas** a Gemini para que redacte el resumen narrativo (nunca pedirle que calcule).
-- [ ] Flujo de estado: el informe nace como borrador y requiere aprobación explícita de un `lab_director`.
-- [ ] Generar también el informe en mandarín, japonés y vietnamita, como PDF, con la bandera del país destino en la portada — solo el informe compilado, nunca datos crudos de casos.
+- [x] **Hueco de esquema encontrado y corregido:** `monthly_report` no tenía columna para "nacionalidad del traficante", aunque el brief (§02) la pide explícitamente. Se agregó `top_trafficker_nationality`.
+- [x] `report_repository.py` trae datos crudos por mes (evidencia + especie, nacionalidades de sospechosos) — la decisión de "cuál es la más afectada/común" vive en el servicio, no en SQL, mismo principio que la Fase 7.
+- [x] `report_service._compute_monthly_aggregates` — número de decomisos, pérdida potencial (USD vía Fase 7, SGD vía Fase 10 en vivo), especie más afectada, nacionalidad más común — todo en Python puro.
+- [x] `gemini_repository.py` — mismo patrón que `fastapi-gemini-s3`, con reintentos (backoff exponencial) agregados tras un `503` real de la API en pruebas.
+- [x] El prompt a Gemini incluye explícitamente "no calcules ni inventes ningún número, solo narra lo que te doy" — cumple "nunca le pidas que calcule" (§05).
+- [x] **Bug real: generación no reanudable.** El primer intento falló a medias por un timeout de Gemini (2 de 3 idiomas ya guardados); la función original revisaba "¿ya existe el informe?" y se detenía ahí, sin completar lo que faltaba. Corregido: ahora resume generando solo las traducciones faltantes.
+- [x] **Bug real: fuentes de PDF sin soporte para CJK.** Las fuentes básicas (`Helvetica`) no dibujan chino/japonés — se investigó y probó una fuente Unicode real (`Arial Unicode.ttf`) con texto en los 3 idiomas antes de confiar en que funcionaría.
+- [x] **Bug real: URLs de S3 "públicas" que en realidad no funcionan** (bucket privado → `AccessDenied`). Corregido en `storage_repository` y en Fase 9 también: ahora se guarda solo la **key** del objeto (`photo_key`/`pdf_key`, columnas renombradas para que el nombre no mienta) y se genera una **URL firmada** bajo demanda en cada consulta — así un informe ya aprobado nunca queda con un link roto ni uno que expira en silencio.
+- [x] Flujo de aprobación probado con ambos roles: `analyst` → `403`, `lab_director` → `200` (`status: approved`), segundo intento de aprobar → `409`.
+- [x] Probado de punta a punta con datos reales: informe de enero 2026 generado, agregados verificados a mano, PDF en chino descargado y leído — bandera, título y texto de Gemini con los números exactos.
 
 ## Fase 12 — Validación de tus propios cálculos
 - [ ] Al menos una forma de verificar `POTENTIAL_LOSS_PER_CASE` (test automatizado o endpoint secundario con lógica distinta que recalcule y compare).

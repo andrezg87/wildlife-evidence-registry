@@ -36,7 +36,7 @@ erDiagram
     numeric quantity
     string unit
     date collection_date
-    string photo_url
+    string photo_key
   }
   SUSPECT {
     uuid id PK
@@ -64,6 +64,7 @@ erDiagram
     numeric potential_loss_usd
     numeric potential_loss_sgd
     string most_affected_species
+    string top_trafficker_nationality
     string status
     uuid approved_by_user_id FK
     timestamp approved_at
@@ -73,5 +74,5 @@ erDiagram
     uuid report_id FK
     string language
     string narrative_text
-    string pdf_url
+    string pdf_key
   }

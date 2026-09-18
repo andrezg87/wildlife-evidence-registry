@@ -14,4 +14,12 @@ _s3_client = boto3.client(
 
 def upload_file(key: str, file_obj: BinaryIO) -> str:
     _s3_client.upload_fileobj(file_obj, settings.aws_s3_bucket, key)
-    return f"https://{settings.aws_s3_bucket}.s3.{settings.aws_region}.amazonaws.com/{key}"
+    return key
+
+
+def get_presigned_url(key: str, expires_in: int = 3600) -> str:
+    return _s3_client.generate_presigned_url(
+        "get_object",
+        Params={"Bucket": settings.aws_s3_bucket, "Key": key},
+        ExpiresIn=expires_in,
+    )

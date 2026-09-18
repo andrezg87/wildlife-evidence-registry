@@ -45,7 +45,7 @@ INSERT INTO case_suspect (case_id, suspect_id, role_in_case) VALUES
     ('40000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000006', 'accomplice'),
     ('40000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000003', 'primary');
 
-INSERT INTO evidence_item (id, case_id, species_id, description, quantity, unit, collection_date, photo_url) VALUES
+INSERT INTO evidence_item (id, case_id, species_id, description, quantity, unit, collection_date, photo_key) VALUES
     ('50000000-0000-0000-0000-000000000001', '40000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', 'Pangolin scales concealed in luggage lining', 12.500, 'kg', '2026-01-10', NULL),
     ('50000000-0000-0000-0000-000000000002', '40000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000002', 'Carved ivory figurines', 3.200, 'kg', '2026-01-10', NULL),
     ('50000000-0000-0000-0000-000000000003', '40000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000006', 'Turtle shell fragments in checked bag', 1.800, 'kg', '2026-01-11', NULL),

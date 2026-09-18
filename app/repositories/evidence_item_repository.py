@@ -3,7 +3,7 @@ from datetime import date
 from app.db.connection import get_pool
 
 EVIDENCE_ITEM_COLUMNS = (
-    "id, case_id, species_id, description, quantity, unit, collection_date, photo_url, created_at"
+    "id, case_id, species_id, description, quantity, unit, collection_date, photo_key, created_at"
 )
 
 
@@ -61,13 +61,13 @@ async def list_by_case_with_species_value(case_id: str) -> list[dict]:
     return [dict(row) for row in rows]
 
 
-async def set_photo_url(evidence_item_id: str, photo_url: str) -> dict | None:
+async def set_photo_key(evidence_item_id: str, photo_key: str) -> dict | None:
     pool = get_pool()
     row = await pool.fetchrow(
-        "UPDATE evidence_item SET photo_url = $2 WHERE id = $1 "
+        "UPDATE evidence_item SET photo_key = $2 WHERE id = $1 "
         f"RETURNING {EVIDENCE_ITEM_COLUMNS}",
         evidence_item_id,
-        photo_url,
+        photo_key,
     )
     return dict(row) if row else None
 
