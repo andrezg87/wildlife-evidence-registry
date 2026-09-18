@@ -8,9 +8,10 @@ async def create_custody_event(
     recorded_by_user_id: str,
     handed_from: str,
     handed_to: str,
+    connection=None,
 ) -> dict:
-    pool = get_pool()
-    row = await pool.fetchrow(
+    executor = connection if connection is not None else get_pool()
+    row = await executor.fetchrow(
         "INSERT INTO custody_event (evidence_item_id, recorded_by_user_id, handed_from, handed_to) "
         "VALUES ($1, $2, $3, $4) "
         f"RETURNING {CUSTODY_EVENT_COLUMNS}",

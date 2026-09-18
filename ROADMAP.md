@@ -67,9 +67,11 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] Endpoint bonus `GET /auth/me` — útil en cualquier sistema real y nos sirvió para probar la protección sin esperar a tener las rutas de negocio.
 
 ## Fase 7 — Capa de servicios (lógica de negocio)
-- [ ] Servicio de casos y evidencia (reglas de creación/actualización).
-- [ ] Servicio de custodia: cada cambio de custodia **crea automáticamente** una entrada en el historial (nunca editable directamente por el usuario).
-- [ ] Servicio de cálculo: `POTENTIAL_LOSS_PER_CASE = Σ (cantidad_incautada × valor_referencia_especie)`, calculado en backend con código determinista.
+- [x] `case_service.py` — CRUD de casos + `calculate_potential_loss_usd`, la fórmula real en Python (`Decimal`, nunca `float`, para evitar errores de redondeo con dinero). Verificada a mano contra el caso 1 sembrado: 10005.00000 exacto.
+- [x] `evidence_service.py` — `register_evidence_item` usa una **transacción real** (`pool.acquire()` + `connection.transaction()`): crea el ítem de evidencia y su primer evento de custodia como una sola unidad atómica. Los repositorios de `evidence_item` y `custody_event` se modificaron para aceptar una conexión opcional, así pueden participar en la misma transacción.
+- [x] `custody_service.py` — `record_transfer` para movimientos posteriores (después del ingreso inicial automático); valida que la evidencia exista antes de insertar.
+- [x] `suspect_service.py` — CRUD de sospechosos + vínculo a casos.
+- [x] Probado con un caso y evidencia nuevos de punta a punta: transacción, custodia automática, segunda transferencia manual, y fórmula de pérdida — todo verificado con números exactos antes de limpiar los datos de prueba.
 
 ## Fase 8 — Capa de presentación (rutas/API)
 - [ ] Endpoints CRUD de casos y evidencia, protegidos por JWT.

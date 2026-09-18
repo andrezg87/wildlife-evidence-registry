@@ -32,9 +32,10 @@ async def create(
     quantity: float,
     unit: str,
     collection_date: date,
+    connection=None,
 ) -> dict:
-    pool = get_pool()
-    row = await pool.fetchrow(
+    executor = connection if connection is not None else get_pool()
+    row = await executor.fetchrow(
         "INSERT INTO evidence_item (case_id, species_id, description, quantity, unit, collection_date) "
         "VALUES ($1, $2, $3, $4, $5, $6) "
         f"RETURNING {EVIDENCE_ITEM_COLUMNS}",
@@ -46,6 +47,18 @@ async def create(
         collection_date,
     )
     return dict(row)
+
+
+async def list_by_case_with_species_value(case_id: str) -> list[dict]:
+    pool = get_pool()
+    rows = await pool.fetch(
+        "SELECT ei.id, ei.quantity, sp.reference_value_usd "
+        "FROM evidence_item ei "
+        "JOIN species sp ON sp.id = ei.species_id "
+        "WHERE ei.case_id = $1",
+        case_id,
+    )
+    return [dict(row) for row in rows]
 
 
 async def set_photo_url(evidence_item_id: str, photo_url: str) -> dict | None:
