@@ -2,7 +2,7 @@ from datetime import date, datetime
 from typing import Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel
 
 from app.presentation.security import CurrentUser, get_current_user, require_lab_director
@@ -52,6 +52,20 @@ async def delete_evidence_item(
     deleted = await evidence_service.delete_evidence_item(str(evidence_id))
     if not deleted:
         raise HTTPException(status_code=404, detail="Evidence item not found")
+
+
+@router.post("/{evidence_id}/photo", response_model=EvidenceOut)
+async def upload_evidence_photo(
+    evidence_id: UUID,
+    file: UploadFile = File(...),
+    current_user: CurrentUser = Depends(get_current_user),
+):
+    evidence = await evidence_service.upload_evidence_photo(
+        str(evidence_id), file.filename, file.file
+    )
+    if evidence is None:
+        raise HTTPException(status_code=404, detail="Evidence item not found")
+    return evidence
 
 
 @router.get("/{evidence_id}/custody-events", response_model=list[CustodyEventOut])

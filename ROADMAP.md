@@ -81,8 +81,11 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] Probado con Swagger implícito vía `curl`: `analyst` recibe `403` al intentar eliminar evidencia, `lab_director` recibe `204`; la cascada se verificó consultando la base de datos directamente después del borrado.
 
 ## Fase 9 — Fotos en S3
-- [ ] Endpoint para subir foto de evidencia a S3 (reutilizando el patrón que ya tienes en `fastapi-gemini-s3/main.py`).
-- [ ] Guardar en la base de datos solo la key/URL resultante, nunca el binario.
+- [x] `storage_repository.py` — cliente de `boto3` creado una sola vez (no por petición, a diferencia del proyecto anterior), en la capa de repositorios (S3 es "otro sistema externo", igual que Postgres, aunque no sea SQL).
+- [x] `evidence_service.upload_evidence_photo` — envuelve la llamada bloqueante de `boto3` con `asyncio.to_thread`, para no congelar el servidor mientras sube el archivo (mismo problema conceptual que las transacciones de la Fase 7, resuelto con otra herramienta porque `boto3` no es async).
+- [x] `POST /evidence/{id}/photo` — probado subiendo un archivo real y confirmando su existencia directamente en el bucket S3 (no solo que la URL se ve bien).
+- [x] Base de datos guarda solo la URL resultante en `evidence_item.photo_url`, nunca el binario.
+- [x] **Limitación documentada, no un bug escondido:** al eliminar una evidencia (cascada de la Fase 8), el archivo en S3 no se borra automáticamente — queda huérfano en el bucket. No lo resolvimos porque el taller no lo exige, pero en producción se agregaría una llamada a `storage_repository` dentro de `delete_evidence_item` para borrarlo también.
 
 ## Fase 10 — Conversión de moneda
 - [ ] Integrar la Currency Exchange API del brief (`GET /convert?from=USD&to=SGD&amount=...`).
