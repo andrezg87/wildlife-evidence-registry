@@ -31,7 +31,7 @@ CREATE TABLE case_record (
 
 CREATE TABLE evidence_item (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    case_id UUID NOT NULL REFERENCES case_record (id),
+    case_id UUID NOT NULL REFERENCES case_record (id) ON DELETE CASCADE,
     species_id UUID NOT NULL REFERENCES species (id),
     description TEXT NOT NULL,
     quantity NUMERIC(12, 3) NOT NULL CHECK (quantity > 0),
@@ -42,15 +42,15 @@ CREATE TABLE evidence_item (
 );
 
 CREATE TABLE case_suspect (
-    case_id UUID NOT NULL REFERENCES case_record (id),
-    suspect_id UUID NOT NULL REFERENCES suspect (id),
+    case_id UUID NOT NULL REFERENCES case_record (id) ON DELETE CASCADE,
+    suspect_id UUID NOT NULL REFERENCES suspect (id) ON DELETE CASCADE,
     role_in_case TEXT,
     PRIMARY KEY (case_id, suspect_id)
 );
 
 CREATE TABLE custody_event (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    evidence_item_id UUID NOT NULL REFERENCES evidence_item (id),
+    evidence_item_id UUID NOT NULL REFERENCES evidence_item (id) ON DELETE CASCADE,
     recorded_by_user_id UUID NOT NULL REFERENCES users (id),
     handed_from TEXT NOT NULL,
     handed_to TEXT NOT NULL,

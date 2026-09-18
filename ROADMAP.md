@@ -74,10 +74,11 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] Probado con un caso y evidencia nuevos de punta a punta: transacción, custodia automática, segunda transferencia manual, y fórmula de pérdida — todo verificado con números exactos antes de limpiar los datos de prueba.
 
 ## Fase 8 — Capa de presentación (rutas/API)
-- [ ] Endpoints CRUD de casos y evidencia, protegidos por JWT.
-- [ ] Endpoints del catálogo de especies y sospechosos.
-- [ ] Endpoint(s) de historial de custodia (solo lectura + creación vía servicio, nunca edición).
-- [ ] Verificar con Swagger (`/docs`) que cada ruta exige el rol correcto.
+- [x] `case_router.py` — CRUD de casos, `GET /cases/{id}/potential-loss`, evidencia y sospechosos anidados bajo `/cases/{id}/...`. Esquemas Pydantic usan `Literal` para `case_type`/`status`/`unit` — mismos valores que el `CHECK` de la base de datos, rechazados con `422` antes de llegar a la lógica de negocio (defensa en profundidad).
+- [x] `evidence_router.py` — incluye `DELETE /evidence/{id}` restringido a `lab_director` (el ejemplo textual de la rúbrica) y los endpoints de historial/registro de custodia.
+- [x] `suspect_router.py` — CRUD de sospechosos.
+- [x] **Bug real encontrado y resuelto durante las pruebas:** `DELETE` sobre evidencia/caso fallaba con `500` (`ForeignKeyViolationError`) porque Postgres bloquea por defecto borrar una fila que otra tabla todavía referencia. Decisión de diseño tomada conscientemente: `ON DELETE CASCADE` en las relaciones donde el hijo no tiene sentido sin el padre (`evidence_item.case_id`, `custody_event.evidence_item_id`, `case_suspect.*`) — nunca en relaciones de "quién lo hizo" (`recorded_by_user_id`, `species_id`), para no destruir accidentalmente historial al borrar un usuario o una especie.
+- [x] Probado con Swagger implícito vía `curl`: `analyst` recibe `403` al intentar eliminar evidencia, `lab_director` recibe `204`; la cascada se verificó consultando la base de datos directamente después del borrado.
 
 ## Fase 9 — Fotos en S3
 - [ ] Endpoint para subir foto de evidencia a S3 (reutilizando el patrón que ya tienes en `fastapi-gemini-s3/main.py`).
