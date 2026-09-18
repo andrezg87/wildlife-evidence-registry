@@ -42,10 +42,10 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] Script ejecutado contra `wildlife_evidence_registry` — verificado: 9 tablas y 8 llaves foráneas, coinciden exactamente con el ERD.
 
 ## Fase 4 — Datos de prueba (seed)
-- [ ] Insertar las 15 especies del catálogo (§03) con su valor de referencia.
-- [ ] Insertar varios casos, evidencia de distintos tipos, sospechosos con nacionalidades distintas.
-- [ ] Insertar al menos un caso con más de un cambio de custodia en su historial.
-- [ ] Volumen que se sienta real, no 2-3 filas de juguete (exigido en "Revisión de código", §05).
+- [x] Insertar las 15 especies del catálogo (§03) con su valor de referencia — `sql/seed.sql`.
+- [x] Insertar varios casos (5), evidencia de distintos tipos (15 ítems, uno por especie), sospechosos con nacionalidades distintas (6 sospechosos, 5 nacionalidades).
+- [x] Insertar al menos un caso con más de un cambio de custodia — el primer ítem de evidencia (escamas de pangolín) tiene 3 eventos de custodia encadenados.
+- [x] Volumen realista: 3 usuarios, 15 especies, 6 sospechosos, 5 casos, 15 evidencias, 8 vínculos caso-sospechoso, 17 eventos de custodia. Verificado con un JOIN de 3 tablas — los datos son consistentes entre sí.
 
 ## Fase 5 — Capa de repositorios (acceso a datos)
 **Qué es:** funciones que ejecutan SQL explícito con `asyncpg` — sin ORM. Es la única capa que le habla a la base de datos.
