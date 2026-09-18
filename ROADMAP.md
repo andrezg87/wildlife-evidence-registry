@@ -49,12 +49,13 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 
 ## Fase 5 — Capa de repositorios (acceso a datos)
 **Qué es:** funciones que ejecutan SQL explícito con `asyncpg` — sin ORM. Es la única capa que le habla a la base de datos.
-- [ ] Repositorio de `species`.
-- [ ] Repositorio de `case`.
-- [ ] Repositorio de `evidence_item`.
-- [ ] Repositorio de `suspect`.
-- [ ] Repositorio de `custody_event` (solo `INSERT`, nunca `UPDATE`).
-- [ ] Repositorio de usuarios (para login).
+- [x] Repositorio de `species` — construido como plantilla completa (repositorio + servicio + ruta), probado de punta a punta por HTTP. Bug real encontrado y corregido: `asyncpg` devuelve `UUID` de Python para columnas `uuid`, el esquema Pydantic debe declarar `UUID`, no `str`.
+- [x] Repositorio de `case_record` — CRUD completo (`list`, `get`, `create`, `update_case_status`, `delete`).
+- [x] Repositorio de `evidence_item` — CRUD completo, incluye `set_photo_url` (para la Fase 9, S3).
+- [x] Repositorio de `suspect` — incluye `link_to_case` y `list_by_case` (usa `JOIN` con la tabla puente `case_suspect`).
+- [x] Repositorio de `custody_event` — deliberadamente **solo** `create` y `list`, sin `update` ni `delete`: la inmutabilidad se garantiza porque esas funciones no existen, no por convención.
+- [x] Repositorio de `users` — `get_by_username`, lo mínimo necesario para el login de la Fase 6.
+- [x] Los 5 repositorios probados directamente contra la base de datos (sin esperar a tener rutas HTTP) — resultados consistentes con los datos de la Fase 4.
 
 ## Fase 6 — Autenticación JWT
 **Por qué aquí:** ya tenemos usuarios y roles en el modelo; ahora conectamos el módulo teórico de §01 con código real.

@@ -1,0 +1,65 @@
+from datetime import date
+
+from app.db.connection import get_pool
+
+EVIDENCE_ITEM_COLUMNS = (
+    "id, case_id, species_id, description, quantity, unit, collection_date, photo_url, created_at"
+)
+
+
+async def list_by_case(case_id: str) -> list[dict]:
+    pool = get_pool()
+    rows = await pool.fetch(
+        f"SELECT {EVIDENCE_ITEM_COLUMNS} FROM evidence_item WHERE case_id = $1 ORDER BY collection_date",
+        case_id,
+    )
+    return [dict(row) for row in rows]
+
+
+async def get_by_id(evidence_item_id: str) -> dict | None:
+    pool = get_pool()
+    row = await pool.fetchrow(
+        f"SELECT {EVIDENCE_ITEM_COLUMNS} FROM evidence_item WHERE id = $1",
+        evidence_item_id,
+    )
+    return dict(row) if row else None
+
+
+async def create(
+    case_id: str,
+    species_id: str,
+    description: str,
+    quantity: float,
+    unit: str,
+    collection_date: date,
+) -> dict:
+    pool = get_pool()
+    row = await pool.fetchrow(
+        "INSERT INTO evidence_item (case_id, species_id, description, quantity, unit, collection_date) "
+        "VALUES ($1, $2, $3, $4, $5, $6) "
+        f"RETURNING {EVIDENCE_ITEM_COLUMNS}",
+        case_id,
+        species_id,
+        description,
+        quantity,
+        unit,
+        collection_date,
+    )
+    return dict(row)
+
+
+async def set_photo_url(evidence_item_id: str, photo_url: str) -> dict | None:
+    pool = get_pool()
+    row = await pool.fetchrow(
+        "UPDATE evidence_item SET photo_url = $2 WHERE id = $1 "
+        f"RETURNING {EVIDENCE_ITEM_COLUMNS}",
+        evidence_item_id,
+        photo_url,
+    )
+    return dict(row) if row else None
+
+
+async def delete(evidence_item_id: str) -> bool:
+    pool = get_pool()
+    result = await pool.execute("DELETE FROM evidence_item WHERE id = $1", evidence_item_id)
+    return result == "DELETE 1"
