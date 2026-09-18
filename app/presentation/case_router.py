@@ -34,6 +34,7 @@ class CaseStatusUpdate(BaseModel):
 class PotentialLossOut(BaseModel):
     case_id: UUID
     potential_loss_usd: float
+    potential_loss_sgd: float
 
 
 class EvidenceOut(BaseModel):
@@ -110,8 +111,12 @@ async def delete_case(case_id: UUID, current_user: CurrentUser = Depends(require
 async def get_case_potential_loss(
     case_id: UUID, current_user: CurrentUser = Depends(get_current_user)
 ):
-    loss = await case_service.calculate_potential_loss_usd(str(case_id))
-    return PotentialLossOut(case_id=case_id, potential_loss_usd=float(loss))
+    loss = await case_service.calculate_potential_loss(str(case_id))
+    return PotentialLossOut(
+        case_id=case_id,
+        potential_loss_usd=float(loss["potential_loss_usd"]),
+        potential_loss_sgd=loss["potential_loss_sgd"],
+    )
 
 
 @router.get("/{case_id}/evidence", response_model=list[EvidenceOut])

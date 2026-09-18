@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from app.repositories import case_repository, evidence_item_repository
+from app.repositories import case_repository, currency_repository, evidence_item_repository
 
 
 async def list_all_cases() -> list[dict]:
@@ -29,3 +29,12 @@ async def calculate_potential_loss_usd(case_id: str) -> Decimal:
         (item["quantity"] * item["reference_value_usd"] for item in items),
         Decimal("0"),
     )
+
+
+async def calculate_potential_loss(case_id: str) -> dict:
+    loss_usd = await calculate_potential_loss_usd(case_id)
+    loss_sgd = await currency_repository.convert("USD", "SGD", float(loss_usd))
+    return {
+        "potential_loss_usd": loss_usd,
+        "potential_loss_sgd": loss_sgd,
+    }

@@ -88,8 +88,9 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] **Limitación documentada, no un bug escondido:** al eliminar una evidencia (cascada de la Fase 8), el archivo en S3 no se borra automáticamente — queda huérfano en el bucket. No lo resolvimos porque el taller no lo exige, pero en producción se agregaría una llamada a `storage_repository` dentro de `delete_evidence_item` para borrarlo también.
 
 ## Fase 10 — Conversión de moneda
-- [ ] Integrar la Currency Exchange API del brief (`GET /convert?from=USD&to=SGD&amount=...`).
-- [ ] Exponer cada cifra monetaria en USD y SGD, resuelta en el momento de la consulta (nunca una tasa fija en el código).
+- [x] `currency_repository.py` — llama la Currency Exchange API del brief con `httpx.AsyncClient` (nativamente async, a diferencia de `boto3` — por eso no necesitó `asyncio.to_thread`). Se revisó la respuesta real de la API antes de asumir su forma.
+- [x] `case_service.calculate_potential_loss` — combina la fórmula propia (USD, Fase 7) con la tasa en vivo de la API externa (SGD), resuelta en cada consulta, nunca una tasa fija en el código.
+- [x] `GET /cases/{id}/potential-loss` ahora devuelve ambas cifras. Verificado contra el caso 1: 10005.00000 USD → SGD, y el resultado coincide exactamente con una llamada manual e independiente a la misma API.
 
 ## Fase 11 — Reporte mensual con Gemini
 - [ ] Calcular en el backend los agregados del mes: número de decomisos, nacionalidad del traficante, pérdida potencial total (ambas monedas), especies más afectadas.
