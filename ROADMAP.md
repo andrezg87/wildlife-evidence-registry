@@ -35,10 +35,11 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] Inicializar repositorio Git — primer commit real hecho (`a64c887`).
 
 ## Fase 3 — Esquema de base de datos (DDL)
-- [ ] Traducir el ERD de la Fase 1 a `CREATE TABLE` en SQL puro.
-- [ ] Aplicar `CHECK`/`ENUM` de Postgres para campos con valores fijos (roles, estado del caso, etc.).
-- [ ] Modelar la cadena de custodia como tabla de historial que **solo crece** — nunca una columna que se sobreescribe (§03, "Chain of custody").
-- [ ] Ejecutar el script contra tu base local y verificar que las tablas y relaciones quedan como en el diagrama.
+- [x] Traducir el ERD de la Fase 1 a `CREATE TABLE` en SQL puro — `sql/schema.sql`, 9 tablas.
+- [x] Aplicar `CHECK` de Postgres para campos con valores fijos: `users.role`, `case_record.case_type`/`status`, `species.unit`/`evidence_item.unit`, `monthly_report.status`, `monthly_report_translation.language`. Se eligió `CHECK` sobre `ENUM` nativo por flexibilidad (más fácil de modificar con `ALTER TABLE` que un `ALTER TYPE`).
+- [x] Tabla `case` renombrada a `case_record` — `case` es palabra reservada en SQL (expresión `CASE WHEN`).
+- [x] Cadena de custodia: `custody_event` solo admite `INSERT` — la inmutabilidad se hace cumplir en la capa de servicios (Fase 7), no con una restricción de base de datos.
+- [x] Script ejecutado contra `wildlife_evidence_registry` — verificado: 9 tablas y 8 llaves foráneas, coinciden exactamente con el ERD.
 
 ## Fase 4 — Datos de prueba (seed)
 - [ ] Insertar las 15 especies del catálogo (§03) con su valor de referencia.
