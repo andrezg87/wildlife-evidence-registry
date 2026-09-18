@@ -59,11 +59,12 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 
 ## Fase 6 — Autenticación JWT
 **Por qué aquí:** ya tenemos usuarios y roles en el modelo; ahora conectamos el módulo teórico de §01 con código real.
-- [ ] Hashing de contraseñas al crear usuario (`passlib`/`bcrypt`).
-- [ ] Endpoint `POST /auth/login`: valida contraseña contra el hash, firma JWT con claim `role`.
-- [ ] Dependencia de FastAPI (`Depends`) que verifica la firma y expiración del token en cada ruta protegida.
-- [ ] Expiración corta y fija, sin refresh tokens (a propósito, según el brief).
-- [ ] Dependencia adicional que restrinja rutas solo a `lab_director` (ej. eliminar evidencia).
+- [x] Hashing de contraseñas con `bcrypt` — usuarios semilla ya guardados con hash (Fase 4), verificado con `bcrypt.checkpw` en el login real.
+- [x] Endpoint `POST /auth/login`: valida contraseña contra el hash, firma JWT con claims `sub` + `role`. Probado: login correcto da token, contraseña incorrecta da `401` sin revelar cuál de los dos datos falló.
+- [x] Dependencia `get_current_user` (`Depends`) que verifica firma y expiración — probado con token ausente, válido, y manipulado (los 3 casos responden como se espera).
+- [x] Expiración corta y fija (`JWT_EXPIRATION_MINUTES=30` en `.env`), sin endpoint de refresh — a propósito.
+- [x] Dependencia adicional `require_lab_director` (compone sobre `get_current_user`) — escrita y lista; se ejercita con una ruta real en la Fase 8 (eliminar evidencia).
+- [x] Endpoint bonus `GET /auth/me` — útil en cualquier sistema real y nos sirvió para probar la protección sin esperar a tener las rutas de negocio.
 
 ## Fase 7 — Capa de servicios (lógica de negocio)
 - [ ] Servicio de casos y evidencia (reglas de creación/actualización).
