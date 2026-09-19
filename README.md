@@ -158,6 +158,13 @@ construir el prompt — Gemini solo redacta.
   del sistema.
 - Sin refresh tokens ni lista de revocación de JWT — a propósito, fuera de alcance según el
   brief del cliente.
+- Si la API de tipo de cambio falla, `GET /cases/{id}/potential-loss` y la generación del
+  informe fallan con `500`; una mejora natural es devolver al menos la cifra en USD.
+- Algunos `POST` con ids que no existen (`case_id`, `species_id`, `suspect_id`) o que duplican
+  un vínculo caso–sospechoso responden `500` en vez de `404`/`409`: falta capturar
+  `ForeignKeyViolationError` y `UniqueViolationError` en la capa de presentación.
+- `POST /reports/generate` llama a Gemini tres veces de forma síncrona (varios segundos); una
+  mejora sería ejecutarlo como tarea en segundo plano.
 
 ## Endpoints principales
 
