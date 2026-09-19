@@ -172,4 +172,4 @@ Ver `/docs` para la lista completa e interactiva. Resumen:
   `GET /reports/{id}/translations`
 - `GET /species`
 
-`DELETE /evidence/{id}` y `PATCH /reports/{id}/approve` están restringidos a `lab_director`.
+`DELETE /cases/{id}`, `DELETE /evidence/{id}` y `PATCH /reports/{id}/approve` están restringidos a `lab_director`.

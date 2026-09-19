@@ -121,7 +121,7 @@ Convención de marcado: `[ ]` pendiente, `[x]` hecho, `[~]` en progreso.
 - [x] `README.md` — instalación, usuarios de prueba, y cada decisión de diseño no trivial con su porqué (pensado como material de repaso, no solo como onboarding).
 - [x] ERD como archivo aparte — `erd.png` / `erd.mmd` (Fase 1, actualizado en Fase 11 con la columna nueva).
 - [x] `.env.example` sin secretos reales — verificado con `git ls-files` que el `.env` real nunca se subió.
-- [x] **Repositorio en GitHub:** https://github.com/andrezg87/wildlife-evidence-registry — público, historial de commits real (14 commits, uno por fase/hito, no un solo commit final).
+- [x] **Repositorio en GitHub:** https://github.com/andrezg87/wildlife-evidence-registry — público, historial de commits real (15 commits, uno por fase/hito, no un solo commit final).
 
 ## Fase 15 — Preparación de la sustentación
 - [ ] **Fase 1 (inglés):** ensayar presentar hallazgos a "Dr. Suresh" en lenguaje de negocio — casos, especies, pérdidas evitadas — sin jerga técnica.
