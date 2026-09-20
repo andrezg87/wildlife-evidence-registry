@@ -50,16 +50,18 @@ async def _compute_monthly_aggregates(year: int, month: int) -> dict:
 
 
 def _build_prompt(aggregates: dict, month: int, year: int, language: str) -> str:
+    top_nationality = aggregates["top_trafficker_nationality"] or "not applicable (no suspects this month)"
+    most_affected_species = aggregates["most_affected_species"] or "not applicable (no seizures this month)"
     return (
         f"Write a short professional monthly summary in {LANGUAGE_NAMES[language]} for a "
         f"wildlife forensics lab report, covering {month:02d}/{year}. "
         "Use exactly these figures - do not calculate, estimate, or invent any numbers "
         "yourself, only narrate what is given:\n"
         f"- Total seizures this month: {aggregates['total_seizures']}\n"
-        f"- Most common trafficker nationality: {aggregates['top_trafficker_nationality']}\n"
+        f"- Most common trafficker nationality: {top_nationality}\n"
         f"- Potential loss avoided: USD {aggregates['potential_loss_usd']:.2f} "
         f"(SGD {aggregates['potential_loss_sgd']:.2f})\n"
-        f"- Species most affected this month: {aggregates['most_affected_species']}\n"
+        f"- Species most affected this month: {most_affected_species}\n"
         "Write 3-4 sentences, professional tone, addressed to a regional wildlife "
         f"trafficking authority. Write only in {LANGUAGE_NAMES[language]}. "
         "Output plain text only, no titles or markdown."
